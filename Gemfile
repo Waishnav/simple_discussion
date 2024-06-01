@@ -9,7 +9,7 @@ gem "standardrb"
 
 gem "devise"
 gem "puma"
-gem "sqlite3"
+gem "sqlite3", "~> 1.4"
 
 group :development, :test do
   # Adds support for debug

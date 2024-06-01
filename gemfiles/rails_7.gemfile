@@ -6,7 +6,8 @@ gem "standardrb"
 gem "devise"
 gem "puma"
 gem "sqlite3", "~> 1.4"
-gem "rails", "~> 5.2.0"
+gem "rails", "~> 7.0.0"
+gem "sprockets-rails"
 
 group :development, :test do
   gem "debug"
