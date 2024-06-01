@@ -10,8 +10,6 @@ gem "rails", "~> 7.0.0"
 gem "sprockets-rails"
 
 group :development, :test do
-  gem "debug"
-  gem "erb_lint", require: false
   gem "appraisal"
 end
 

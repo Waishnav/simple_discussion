@@ -9,8 +9,6 @@ gem "sqlite3", "~> 1.4"
 gem "rails", "~> 5.2.0"
 
 group :development, :test do
-  gem "debug"
-  gem "erb_lint", require: false
   gem "appraisal"
 end
 
