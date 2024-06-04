@@ -5,12 +5,14 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 # Specify your gem's dependencies in simple_discussion.gemspec
 gemspec
 
-gem "standardrb"
-
+# used for dummy rails app integration
 gem "devise"
 gem "puma"
-gem "sqlite3", "~> 1.4"
+gem 'sprockets-rails'
 
-group :development, :test do
-  gem "appraisal"
-end
+# testing against sqlite3 db
+gem "sqlite3", "~> 1.7"
+
+# testing
+gem "appraisal"
+gem "standardrb"
