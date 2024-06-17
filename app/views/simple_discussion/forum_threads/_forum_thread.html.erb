@@ -1,13 +1,13 @@
 <%= cache forum_thread do %>
-  <div class="forum-thread d-flex flex-row mb-4">
+  <%= link_to simple_discussion.forum_thread_path(forum_thread), class: "forum-thread d-flex flex-row mb-4" do %>
     <div class="mr-3 d-none d-md-block">
       <img class="avatar" src="<%= gravatar_url_for(forum_thread.user.email,size: 30) %>" alt="user avatar">
     </div>
     <div class="thread-container">
       <div class="thread-header d-flex flex-row justify-content-between mb-1">
-        <%= link_to simple_discussion.forum_thread_path(forum_thread), class: "thread-header-title" do %>
+        <div class="thread-header-title">
           <%= icon "fas", "thumb-tack", class: "text-muted" if forum_thread.pinned? %> <%= forum_thread.title %>
-        <% end %>
+        </div>
         <div class="thread-header-icons d-flex flex-row">
           <div class="chat-icon mr-3">
             <%= icon "fas", "comments" %>
@@ -39,5 +39,5 @@
         </div>
       </div>
     </div>
-  </div>
+  <% end %>
 <% end %>

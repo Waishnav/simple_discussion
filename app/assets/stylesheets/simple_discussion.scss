@@ -4,11 +4,8 @@
 @import "simple_discussion_variables";
 
 .community-heading {
-  margin-top: 10px;
-  width: 95%;
   color: #212529;
-  margin-left: 4rem;
-  margin-bottom: 24px;
+  padding-block: 12px;
 }
 
 // Primary button for Forum
@@ -236,32 +233,30 @@
   border: 1px solid #80808029;
   border-radius: 3px;
   padding: 20px;
+
+  &:hover {
+    text-decoration: none;
+    background-color: $forum-thread-filter-btn-link-hover-background;
+
+  }
 }
 
 // Formatting forum post
 .simple_discussion .forum-post {
-  padding: 10px;
   border-radius: $post-body-border-radius;
   margin-bottom: 10px;
   border: 1px solid #80808029;
 
-  &:hover {
-    background-color: #f4f3f3;
-  }
-
   .card-body {
-    padding: 10px;
-
-    p {
-      font-size: 14px;
-    }
+    margin-top: 16px;
   }
 }
 
 // Formatting the listtile for user details
 .simple_discussion .forum-post .forum-post-header,
 .form-user-details {
-  padding: 0 10px;
+  padding: 10px;
+  background-color: $forum-thread-filter-btn-link-hover-background;
 
   p {
     padding: 0;
@@ -295,10 +290,9 @@
 
 .sidebar-sticky {
   position: sticky;
-  top: 120px;
+  top: 60px;
 }
 
 .thread-page-container {
-  border: 1px solid #80808029;
-  padding: 15px;
+  padding: 24px;
 }
