@@ -1,6 +1,7 @@
 class ForumThread < ApplicationRecord
   extend FriendlyId
   friendly_id :title, use: :slugged
+  validate :clean_title
 
   belongs_to :forum_category
   belongs_to :user
@@ -21,6 +22,22 @@ class ForumThread < ApplicationRecord
   scope :sorted, -> { order(updated_at: :desc) }
   scope :unpinned, -> { where.not(pinned: true) }
   scope :unsolved, -> { where.not(solved: true) }
+
+  def clean_title
+    puts "title: #{title}"
+    filters = [:profanity, :sex, :violence, :hate]
+
+    detected_words = Set.new
+
+    filters.each do |matchlist|
+      filter = LanguageFilter::Filter.new(matchlist: matchlist)
+      detected_words.merge(filter.matched(title)) if filter.match?(title)
+    end
+
+    if detected_words.any?
+      errors.add(:title, "contains inappropriate language: #{detected_words.to_a.join(', ')}")
+    end
+  end
 
   def subscribed_users
     (users + optin_subscribers).uniq - optout_subscribers

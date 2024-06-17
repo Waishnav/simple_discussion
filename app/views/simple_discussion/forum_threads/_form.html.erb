@@ -3,14 +3,10 @@
    html: { data: {behavior: "comment-form"} } do |f| %>
 
   <% if @forum_thread.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@forum_thread.errors.count, "error") %> <%= t("forum_thread_error_explanation") %></h2>
-
-      <ul>
+    <div class="alert alert-danger" role="alert">
       <% @forum_thread.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
-      </ul>
     </div>
   <% end %>
 
