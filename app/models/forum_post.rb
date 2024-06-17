@@ -3,6 +3,7 @@ class ForumPost < ApplicationRecord
   belongs_to :forum_thread, counter_cache: true, touch: true
   belongs_to :user
 
+  validate :clean_body
   validates :user_id, :body, presence: true
   validate :clean_body, if: -> { SimpleDiscussion.profanity_filter }
 
