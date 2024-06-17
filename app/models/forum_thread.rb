@@ -2,7 +2,6 @@ require "language_filter"
 class ForumThread < ApplicationRecord
   extend FriendlyId
   friendly_id :title, use: :slugged
-  validate :clean_title
 
   belongs_to :forum_category
   belongs_to :user
