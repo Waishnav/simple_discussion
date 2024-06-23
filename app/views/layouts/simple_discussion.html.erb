@@ -67,3 +67,7 @@
 </div>
 
 <% parent_layout("application") %>
+
+<% SimpleDiscussion::Engine.javascripts.each do |js_path| %>
+   <%= javascript_include_tag js_path %>
+<% end %>
