@@ -11,3 +11,4 @@
 .log
 .sqlite3
 /test/dummy/tmp
+/node_modules
