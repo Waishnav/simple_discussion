@@ -11,5 +11,5 @@ class SpamReport < ApplicationRecord
     irrelevant_content: 2,
     misleading_content: 3,
     others: 4
-}
+  }
 end

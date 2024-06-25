@@ -2,7 +2,7 @@ require "language_filter"
 class ForumPost < ApplicationRecord
   belongs_to :forum_thread, counter_cache: true, touch: true
   belongs_to :user
-  has_many :spam_posts, dependent: :destroy
+  has_many :spam_reports, dependent: :destroy
 
   validate :clean_body
   validates :user_id, :body, presence: true

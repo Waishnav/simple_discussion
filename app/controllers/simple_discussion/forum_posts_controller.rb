@@ -29,8 +29,22 @@ class SimpleDiscussion::ForumPostsController < SimpleDiscussion::ApplicationCont
   end
 
   def destroy
-    @forum_post.destroy!
-    redirect_to simple_discussion.forum_thread_path(@forum_thread)
+    # if @forum_post is first post of forum_thread then we need to destroy forum_thread
+    if @forum_thread.forum_posts.first == @forum_post
+      @forum_thread.destroy!
+      if params[:from] == "moderators_page"
+        redirect_to simple_discussion.spam_reports_forum_threads_path
+      else
+        redirect_to simple_discussion.root_path
+      end
+    else
+      @forum_post.destroy!
+      if params[:from] == "moderators_page"
+        redirect_to simple_discussion.spam_reports_forum_threads_path
+      else
+        redirect_to simple_discussion.forum_thread_path(@forum_thread)
+      end
+    end
   end
 
   def solved
