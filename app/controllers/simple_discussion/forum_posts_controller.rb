@@ -52,6 +52,17 @@ class SimpleDiscussion::ForumPostsController < SimpleDiscussion::ApplicationCont
     redirect_to simple_discussion.forum_thread_path(@forum_thread, anchor: ActionView::RecordIdentifier.dom_id(@forum_post))
   end
 
+  def report_spam
+    @forum_post = @forum_thread.forum_posts.find(params[:id])
+    @spam_report = SpamReport.new(forum_post: @forum_post, user: current_user, reason: params[:reason], details: params[:details])
+
+    if @spam_report.save
+      redirect_to simple_discussion.forum_thread_path(@forum_thread, anchor: ActionView::RecordIdentifier.dom_id(@forum_post))
+    else
+      render template: "simple_discussion/forum_threads/show"
+    end
+  end
+
   private
 
   def set_forum_thread

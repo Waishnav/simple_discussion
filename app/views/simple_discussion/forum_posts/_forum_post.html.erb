@@ -1,42 +1,38 @@
-<%# We don't currently cache the forum posts because they have permissions to deal with %>
-
 <%= content_tag :div, id: forum_post.solved ? 'solution' : dom_id(forum_post), class: "forum-post" do %>
   <div class="forum-post-header"> 
-    <% if is_moderator_or_owner?(forum_post) %>
-      <div class="float-right d-flex align-items-center">
-        <% if forum_post.solved? %>
-          <span class="badge badge-success p-2 mr-2"><%= t('solution') %></span>
-        <% end %>
+    <div class="float-right d-flex align-items-center">
+      <% if forum_post.solved? %>
+        <span class="badge badge-success p-2 mr-2"><%= t('solution') %></span>
+      <% end %>
+      <% if user_signed_in? %>
         <div class="dropdown" data-controller="dropdown">
           <button class="btn btn-light bg-white" role="button" data-dropdown-target="dropdownButton">
             <%= icon("fas","ellipsis-v") %>
           </button>
           <div class="dropdown-menu dropdown-menu-right" data-dropdown-target="dropdownMenu">
+            <%= link_to t('report_spam'), "#", class: "dropdown-item", data: { controller: "report-spam", report_spam_target: "reportSpamButton", toggle: "modal", target: "#reportSpamModal", post_id: forum_post.id } %>
             <% if is_moderator_or_owner?(forum_post) %>
               <%= link_to t('edit_post'), simple_discussion.edit_forum_thread_forum_post_path(@forum_thread, forum_post),
-                    class: "dropdown-item",
-                    data: { toggle: "tooltip", placement: "left" },
-                    title: t('edit_this_post') %>
+                  class: "dropdown-item",
+                  data: { toggle: "tooltip", placement: "left" },
+                  title: t('edit_this_post') %>
               <%= link_to t('delete_post'), simple_discussion.forum_thread_forum_post_path(@forum_thread, forum_post),
-                    class: "dropdown-item",
-                    method: :delete, 
-                    data: { toggle: "tooltip", placement: "left", confirm: "Are you sure you want to delete this post?" },
-                    title: t('delete_this_post') %>
-              <% end %>
+                  class: "dropdown-item",
+                  method: :delete, 
+                  data: { toggle: "tooltip", placement: "left", confirm: "Are you sure you want to delete this post?" },
+                  title: t('delete_this_post') %>
+            <% end %>
+            <% if is_moderator_or_owner?(@forum_thread) %>
               <% if @forum_thread.solved? && forum_post.solved? %>
-                  <% if is_moderator_or_owner?(@forum_thread) %>
-                    <%= link_to t('unmark_as_solution'), simple_discussion.unsolved_forum_thread_forum_post_path(@forum_thread, forum_post), class: "dropdown-item", method: :put %>
+                <%= link_to t('unmark_as_solution'), simple_discussion.unsolved_forum_thread_forum_post_path(@forum_thread, forum_post), class: "dropdown-item", method: :put %>
+              <% else %>
+                <%= link_to t('mark_as_solution'), simple_discussion.solved_forum_thread_forum_post_path(@forum_thread, forum_post), method: :put, class: "dropdown-item" %>
               <% end %>
-              <% elsif is_moderator_or_owner?(@forum_thread) %>
-                  <%= link_to t('mark_as_solution'), simple_discussion.solved_forum_thread_forum_post_path(@forum_thread, forum_post), 
-                    method: :put,
-                    class: "dropdown-item"
-               %>
             <% end %>
           </div>
         </div>
-      </div>
-    <% end %>
+      <% end %>
+    </div>
     <div class="user-details d-flex flex-row">
       <div class="user-avatar mr-2" ><img src="<%= gravatar_url_for(forum_post.user.email, size: 30) %>" alt="avatar of user" ></div>
       <div class="details d-flex flex-column justify-content-between">

@@ -39,5 +39,6 @@
 
 <%= render partial: "simple_discussion/forum_posts/forum_post", collection: @forum_thread.forum_posts.includes(:user).sorted %>
 <%= render partial: "simple_discussion/forum_posts/form" if user_signed_in? %>
+<%= render partial: "simple_discussion/forum_posts/report_spam_modal_form", locals: { forum_thread: @forum_thread } if user_signed_in? %>
 
 <%= render partial: "login_bar" if !user_signed_in? %>
