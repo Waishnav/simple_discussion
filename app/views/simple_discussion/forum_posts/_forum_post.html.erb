@@ -19,6 +19,7 @@
             <%= icon("fas","ellipsis-v") %>
           </button>
           <div class="dropdown-menu dropdown-menu-right" data-dropdown-target="dropdownMenu">
+            <%= link_to t('report_spam'), "#", class: "dropdown-item", data: { controller: "report-spam", report_spam_target: "reportSpamButton", toggle: "modal", target: "#reportSpamModal", post_id: forum_post.id } %>
             <% if is_moderator_or_owner?(forum_post) %>
               <%= link_to t('edit_post'), simple_discussion.edit_forum_thread_forum_post_path(@forum_thread, forum_post),
                   class: "dropdown-item",
