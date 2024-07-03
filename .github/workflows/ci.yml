@@ -32,7 +32,7 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler: default
-          bundler-cache: true
+          cache-version: 'v2'
       - name: StandardRb check
         run: bundle exec standardrb
       - name: Run tests
