@@ -1,7 +1,7 @@
 module SimpleDiscussion::ForumThreadsHelper
   # Used for flagging links in the navbar as active
-  def forum_link_to(path, opts = {}, &block)
-    link_to path, class: forum_link_class(path, opts), &block
+  def forum_link_to(path, opts = {}, &)
+    link_to(path, class: forum_link_class(path, opts), &)
   end
 
   def forum_link_class(matches, opts = {})
