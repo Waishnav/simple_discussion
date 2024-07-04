@@ -127,18 +127,10 @@ GEM
       warden (~> 1.2.3)
     drb (2.2.1)
     erubi (1.12.0)
-    ffi (1.17.0-aarch64-linux-gnu)
-    ffi (1.17.0-aarch64-linux-musl)
-    ffi (1.17.0-arm-linux-gnu)
-    ffi (1.17.0-arm-linux-musl)
-    ffi (1.17.0-arm64-darwin)
-    ffi (1.17.0-x86-linux-gnu)
-    ffi (1.17.0-x86-linux-musl)
-    ffi (1.17.0-x86_64-darwin)
+    ffi (1.17.0)
     ffi (1.17.0-x86_64-linux-gnu)
-    ffi (1.17.0-x86_64-linux-musl)
-    font-awesome-sass (6.5.2)
-      sassc (~> 2.0)
+    font-awesome-sass (5.13.1)
+      sassc (>= 1.11)
     friendly_id (5.5.1)
       activerecord (>= 4.0.0)
     globalid (1.2.1)
@@ -307,6 +299,7 @@ PLATFORMS
 DEPENDENCIES
   appraisal
   devise
+  font-awesome-sass (~> 5.13.1)
   puma
   rails!
   simple_discussion!
