@@ -18,6 +18,8 @@ if ActiveSupport::TestCase.respond_to?(:fixture_path=)
 end
 
 class ActiveSupport::TestCase
+  fixtures :all
+
   include ActionMailer::TestHelper
   include ActiveJob::TestHelper
 end
