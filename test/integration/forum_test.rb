@@ -4,6 +4,8 @@ class ForumTest < ActionDispatch::IntegrationTest
   include ActionView::RecordIdentifier
   include SimpleDiscussion::Engine.routes.url_helpers
 
+  fixtures :all
+
   setup do
     sign_in users(:one)
   end
