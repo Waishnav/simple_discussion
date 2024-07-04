@@ -8,7 +8,7 @@ gemspec
 # used for dummy rails app integration
 gem "devise"
 gem "puma"
-gem 'sprockets-rails'
+gem "sprockets-rails"
 
 # testing against sqlite3 db
 gem "sqlite3", "~> 1.7"
