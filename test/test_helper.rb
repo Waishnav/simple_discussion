@@ -18,6 +18,8 @@ elsif ActiveSupport::TestCase.respond_to?(:fixture_path=)
   ActionDispatch::IntegrationTest.fixture_path = ActiveSupport::TestCase.fixture_path
 end
 
+ActiveSupport::TestCase.fixtures :all
+
 class ActiveSupport::TestCase
   include ActionMailer::TestHelper
   include ActiveJob::TestHelper
