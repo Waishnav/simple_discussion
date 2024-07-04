@@ -16,3 +16,4 @@ gem "sqlite3", "~> 1.7"
 # testing
 gem "appraisal"
 gem "standardrb"
+gem "font-awesome-sass", "~> 5.13.1"

@@ -8,6 +8,7 @@ gem "sprockets-rails"
 gem "sqlite3", "~> 1.7.2"
 gem "appraisal"
 gem "standardrb"
+gem "font-awesome-sass", "~> 5.13.1"
 gem "rails", "~> 7.1.0"
 
 gemspec path: "../"
