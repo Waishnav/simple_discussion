@@ -302,6 +302,7 @@ DEPENDENCIES
   appraisal
   devise
   font-awesome-sass (~> 5.13.1)
+  language_filter
   puma
   rails!
   simple_discussion!
