@@ -39,3 +39,20 @@ es:
   ask_your_question: Haz tu pregunta
   update_comment: Actualiza tu comentario
   your_changes_were_saved: Tus cambios fueron guardados
+  search_not_found: No se encontraron resultados para tu búsqueda
+  check_out: Echa un vistazo
+  latest_questions: las preguntas más recientes
+  instead: ¿en su lugar?
+  forum_thread_error_explanation: "prohibió que este hilo del foro se guardara:"
+  ago: "hace"
+  on: "el"
+  mark_as_solved: "Marcar como resuelto"
+  undo: "Deshacer"
+  back_to_thread: "Volver al hilo"
+  created_by: "Creado por"
+  solved: "Resuelto"
+  open: "Abrir"
+  create_account: "Crear cuenta"
+  login: "Iniciar sesión"
+  commented: "comentó:"
+  inappropriate_language_error_message: "contiene lenguaje inapropiado: %{words}"

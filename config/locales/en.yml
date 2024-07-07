@@ -56,3 +56,4 @@ en:
   create_account: "Create account"
   login: "Log in"
   commented: "commented:"
+  inappropriate_language_error_message: "contains inappropriate language: %{words}"

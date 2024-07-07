@@ -24,7 +24,6 @@ class ForumThread < ApplicationRecord
   scope :unsolved, -> { where.not(solved: true) }
 
   def clean_title
-    puts "title: #{title}"
     filters = [:profanity, :sex, :violence, :hate]
 
     detected_words = Set.new
@@ -35,7 +34,7 @@ class ForumThread < ApplicationRecord
     end
 
     if detected_words.any?
-      errors.add(:title, "contains inappropriate language: #{detected_words.to_a.join(", ")}")
+      errors.add(:title, I18n.t(".inappropriate_language_error_message", words: detected_words.to_a.join(", ")))
     end
   end
 

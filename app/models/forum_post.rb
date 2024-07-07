@@ -19,7 +19,7 @@ class ForumPost < ApplicationRecord
     end
 
     if detected_words.any?
-      errors.add(:body, "contains inappropriate language: #{detected_words.to_a.join(", ")}")
+      errors.add(:body, I18n.t(".inappropriate_language_error_message", words: detected_words.to_a.join(", ")))
     end
   end
 
