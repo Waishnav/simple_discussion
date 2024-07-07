@@ -1,4 +1,6 @@
-lib = File.expand_path("../lib", __FILE__)
+# frozen_string_literal: true
+
+lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "simple_discussion/version"
 
@@ -24,4 +26,5 @@ Gem::Specification.new do |spec|
   spec.add_dependency "friendly_id", ">= 5.2.0"
   spec.add_dependency "rails", ">= 4.2"
   spec.add_dependency "will_paginate", ">= 3.1.0"
+  spec.metadata["rubygems_mfa_required"] = "true"
 end

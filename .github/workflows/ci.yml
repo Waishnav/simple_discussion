@@ -12,15 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby: ['2.7', '3.0']
+        ruby: ['3.1', '3.2', '3.3']
         gemfile:
-          - rails_5_2
-          - rails_6
           - rails_6_1
-          - rails_master
-        exclude:
-          - ruby: '3.0'
-            gemfile: 'rails_5_2'
+          - rails_7
+          - rails_7_1
+          - rails_main
     env:
       BUNDLE_GEMFILE: ${{ github.workspace }}/gemfiles/${{ matrix.gemfile }}.gemfile
       BUNDLE_PATH_RELATIVE_TO_CWD: true
@@ -33,12 +30,12 @@ jobs:
           ruby-version: ${{ matrix.ruby }}
           bundler: default
           bundler-cache: true
+          rubygems: latest
       - name: StandardRb check
         run: bundle exec standardrb
       - name: Run tests
         env:
-          DATABASE_URL: "sqlite3:noticed_test"
-          STRIPE_PRIVATE_KEY: ${{ secrets.STRIPE_PRIVATE_KEY }}
+          DATABASE_URL: "sqlite3:simple_discussion_test"
         run: |
           bin/rails db:test:prepare
           bin/rails test

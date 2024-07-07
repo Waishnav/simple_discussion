@@ -15,7 +15,7 @@ class SimpleDiscussion::ForumPostNotificationJob < ApplicationJob
   end
 
   def send_webhook(forum_post)
-    slack_webhook_url = Rails.application.secrets.simple_discussion_slack_url
+    slack_webhook_url = Rails.application.credentials.simple_discussion_slack_url
     return if slack_webhook_url.blank?
 
     forum_thread = forum_post.forum_thread
