@@ -35,7 +35,7 @@ class ForumThread < ApplicationRecord
     end
 
     if detected_words.any?
-      errors.add(:title, "contains inappropriate language: #{detected_words.to_a.join(', ')}")
+      errors.add(:title, "contains inappropriate language: #{detected_words.to_a.join(", ")}")
     end
   end
 
