@@ -16,7 +16,7 @@ class ForumThread < ApplicationRecord
   validates :user_id, :title, presence: true
   validates_associated :forum_posts
 
-  before_validation :clean_title, if: -> { SimpleDiscussion.profanity_filter }
+  validate :clean_title, if: -> { SimpleDiscussion.profanity_filter }
 
   scope :pinned_first, -> { order(pinned: :desc) }
   scope :solved, -> { where(solved: true) }

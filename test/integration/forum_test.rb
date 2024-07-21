@@ -72,7 +72,7 @@ class ForumTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_entity
-    assert_includes response.body, "Title contains inappropriate language"
+    assert_includes response.body, "contains inappropriate language: #{inappropriate_word}"
   end
 
   test "cannot create a forum thread with inappropriate language in body" do
@@ -84,7 +84,7 @@ class ForumTest < ActionDispatch::IntegrationTest
             forum_category_id: forum_categories(:general).id,
             title: "Clean Title",
             forum_posts_attributes: [{
-              body: "This post contains inappropriate language: #{inappropriate_word}"
+              body: "contains inappropriate language: #{inappropriate_word}"
             }]
           }
         }
@@ -92,7 +92,7 @@ class ForumTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unprocessable_entity
-    assert_includes response.body, "Body contains inappropriate language"
+    assert_includes response.body, "contains inappropriate language: #{inappropriate_word}"
   end
 
   test "cannot reply to a forum thread with inappropriate language" do
@@ -100,13 +100,13 @@ class ForumTest < ActionDispatch::IntegrationTest
     assert_no_difference "ForumPost.count" do
       post forum_thread_forum_posts_path(forum_threads(:hello)), params: {
         forum_post: {
-          body: "This reply contains inappropriate language: #{inappropriate_word}"
+          body: "contains inappropriate language: #{inappropriate_word}"
         }
       }
     end
 
     assert_response :unprocessable_entity
-    assert_includes response.body, "Body contains inappropriate language"
+    assert_includes response.body, "contains inappropriate language: #{inappropriate_word}"
   end
 
   test "can create a forum thread with appropriate language in title and body" do
