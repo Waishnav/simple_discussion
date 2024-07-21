@@ -12,8 +12,10 @@ module SimpleDiscussion
   # Define who owns the subscription
   mattr_accessor :send_email_notifications
   mattr_accessor :send_slack_notifications
+  mattr_accessor :profanity_filter
   @@send_email_notifications = true
   @@send_slack_notifications = true
+  @@profanity_filter = true
 
   def self.setup
     yield self

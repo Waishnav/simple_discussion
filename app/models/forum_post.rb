@@ -2,7 +2,7 @@ class ForumPost < ApplicationRecord
   belongs_to :forum_thread, counter_cache: true, touch: true
   belongs_to :user
 
-  validate :clean_body
+  before_validation :clean_body, if: -> { SimpleDiscussion.profanity_filter }
   validates :user_id, :body, presence: true
 
   scope :sorted, -> { order(:created_at) }

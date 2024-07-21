@@ -1,7 +1,6 @@
 class ForumThread < ApplicationRecord
   extend FriendlyId
   friendly_id :title, use: :slugged
-  validate :clean_title
 
   belongs_to :forum_category
   belongs_to :user
@@ -16,6 +15,8 @@ class ForumThread < ApplicationRecord
   validates :forum_category, presence: true
   validates :user_id, :title, presence: true
   validates_associated :forum_posts
+
+  before_validation :clean_title, if: -> { SimpleDiscussion.profanity_filter }
 
   scope :pinned_first, -> { order(pinned: :desc) }
   scope :solved, -> { where(solved: true) }
