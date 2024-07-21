@@ -248,7 +248,12 @@
   border: 1px solid #80808029;
 
   .card-body {
+    overflow-x: auto;
     margin-top: 16px;
+  }
+  .card-body iframe {
+    border-radius: $post-body-border-radius;
+    border: 2px solid #80808029;
   }
 }
 
