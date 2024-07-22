@@ -4,13 +4,18 @@ import { marked } from "marked";
 import * as bootstrap from 'bootstrap'
 
 export default class extends Controller {
+  static values = {
+    circuitEmbed: Boolean,
+    videoEmbed: Boolean,
+    userTagging: Boolean
+  };
+
   static targets = ["tagDropdown", "textarea"]
 
   connect() {
-    //this.tagDropdownTarget.style.display = "block"
     this.tagDropdownTarget.style.display = "none"
-    this.initializeEditor();
-    this.initializeModal();
+    this.initializeEditor(this.tagDropdownTarget);
+    this.initializeModals();
     this.initializeUserTaggingDropdown();
 
     const previewButton = document.querySelector(".preview")
@@ -18,103 +23,164 @@ export default class extends Controller {
     previewButton.style.height = "34px"
   }
 
-  initializeEditor() {
+  initializeEditor(dropdown) {
+    const customButtons = [];
+
+    if (this.circuitEmbedValue) {
+      customButtons.push({
+        name: "embed-circuit",
+        action: this.openEmbedCircuitModal.bind(this),
+        className: "fa fa-microchip",
+        title: "Embed Circuit",
+      });
+    }
+
+    if (this.videoEmbedValue) {
+      customButtons.push({
+        name: "embed-video",
+        action: this.openEmbedVideoModal.bind(this),
+        className: "fa fa-film",
+        title: "Embed Video",
+      });
+    }
+
+    if (this.userTaggingValue) {
+      customButtons.push({
+        name: "tag-user",
+        action: (editor) => {
+          if (dropdown.querySelectorAll("button").length > 0) {
+            editor.codemirror.replaceSelection("@");
+            return;
+          }
+          const cursor = editor.codemirror.getCursor();
+          editor.codemirror.replaceSelection(`[@(name)](link_to_profile)`);
+          editor.codemirror.setCursor(cursor.line, cursor.ch + 2);
+          editor.codemirror.setSelection(
+            { line: cursor.line, ch: cursor.ch + 3 },
+            { line: cursor.line, ch: cursor.ch + 7 },
+          );
+          editor.codemirror.focus();
+        },
+        className: "fa fa-at",
+        title: "Tag User",
+      });
+
+    }
+
+    const toolbarOptions = [
+      {
+        name: "bold",
+        action: SimpleMDE.toggleBold,
+        className: "fa fa-bold",
+        title: "Bold",
+      },
+      {
+        name: "italic",
+        action: SimpleMDE.toggleItalic,
+        className: "fa fa-italic",
+        title: "Italic",
+      },
+      {
+        name: "heading",
+        action: SimpleMDE.toggleHeadingSmaller,
+        className: "fa fa-header",
+        title: "Heading",
+      },
+      "|",
+      {
+        name: "quote",
+        action: SimpleMDE.toggleBlockquote,
+        className: "fa fa-quote-left",
+        title: "Quote",
+      },
+      {
+        name: "unordered-list",
+        action: SimpleMDE.toggleUnorderedList,
+        className: "fa fa-list-ul",
+        title: "Unordered List",
+      },
+      {
+        name: "ordered-list",
+        action: SimpleMDE.toggleOrderedList,
+        className: "fa fa-list-ol",
+        title: "Ordered List",
+      },
+      "|",
+      {
+        name: "link",
+        action: SimpleMDE.drawLink,
+        className: "fa fa-link",
+        title: "Create Link",
+      },
+      ...customButtons,
+      "|",
+      {
+        name: "preview",
+        className: "preview no-disable",
+        action: function(editor) {
+          SimpleMDE.togglePreview(editor);
+        },
+        title: "Preview",
+      },
+    ];
+
     this.editor = new SimpleMDE({
       element: this.textareaTarget,
       forceSync: true,
-      toolbar: [
-        "bold",
-        "italic",
-        "heading",
-        "|",
-        "quote",
-        "unordered-list",
-        "ordered-list",
-        "|",
-        "link",
-        {
-          name: "embed-circuit",
-          action: this.openEmbedCircuitModal.bind(this),
-          className: "fa fa-microchip",
-          title: "Embed Circuit",
-        },
-        {
-          name: "tag-user",
-          action: function(editor) {
-            // toggle the dropdown if dropdown have atlease one user
-            if (this.tagDropdownTarget.querySelectorAll("button").length > 0) {
-              // insert @ in the textarea and show the dropdown
-              editor.codemirror.replaceSelection("@");
-              return
-            }
-            const cursor = editor.codemirror.getCursor();
-            // Insert markdown syntax for tagging user
-            editor.codemirror.replaceSelection(`[@(name)](link_to_profile)`);
-            // set the cursor to start of name with name selected
-            editor.codemirror.setCursor(cursor.line, cursor.ch + 2);
-            editor.codemirror.setSelection({ line: cursor.line, ch: cursor.ch + 3 },
-              { line: cursor.line, ch: cursor.ch + 7 });
-            // focus the cursor
-            editor.codemirror.focus();
-          },
-          className: "fa fa-at",
-          title: "Tag User",
-        },
-        "|",
-        {
-          name: "preview",
-          className: "preview no-disable",
-          action: function(editor) {
-            SimpleMDE.togglePreview(editor);
-          },
-          title: "Preview",
-        }
-      ],
+      toolbar: toolbarOptions,
       spellChecker: false,
-      previewRender: function(plainText, preview) {
-        let markdownText = customMarkdownParser(plainText);
+      previewRender: (plainText, preview) => {
+        let markdownText = this.customMarkdownParser(plainText);
         return (preview.innerHTML = marked(markdownText));
       },
     });
-
-    function customMarkdownParser(markdownText) {
-      // ![Circuit](link_to_circuit) => <iframe src="link_to_circuit" width="540" height="300" frameborder="0"></iframe>
-      // [Video](link_to_video) => <iframe width="540" height="300" src="link_to_video" frameborder="0" allowfullscreen></iframe>
-      // [@(name)](link_to_profile) => <a class="tag-user" target="blank" href="link_to_profile">@name</a>
-
-      const embedCircuitPattern = /!\[Circuit\]\(([^)]+)\)/g;
-      const embedVideoPattern = /!\[Video\]\(([^)]+)\)/g;
-      const tagUserPattern = /\[@\(([^)]+)\)\]\(([^)]+)\)/g;
-
-      function replaceEmbedCircuit(match, circuitURL) {
-        return `<iframe src="${circuitURL}" width="540" height="300" frameborder="0"></iframe><br>`;
-      }
-
-      function replaceEmbedVideo(match, videoURL) {
-        const videoId = videoURL.split("v=")[1].split("&")[0];
-        return `<iframe width="540" height="300" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe><br>`;
-      }
-
-      function replaceTagUser(match, username, profileURL) {
-        return `<a class="tag-user" target="_blank" href="${profileURL}">@${username}</a>`;
-      }
-
-      // Apply replacements for each syntax
-      markdownText = markdownText.replace(embedCircuitPattern, replaceEmbedCircuit);
-      markdownText = markdownText.replace(embedVideoPattern, replaceEmbedVideo);
-      markdownText = markdownText.replace(tagUserPattern, replaceTagUser);
-
-      return markdownText;
-    }
   }
 
-  initializeModal() {
-    this.modal = new bootstrap.Modal(document.getElementById('embedCircuitModal'));
+  customMarkdownParser(markdownText) {
+    let parsedText = markdownText;
+
+    // ![Circuit](link_to_circuit) => <iframe src="link_to_circuit" width="540" height="300" frameborder="0"></iframe>
+    if (this.circuitEmbedValue) {
+      const embedCircuitPattern = /!\[Circuit\]\(([^)]+)\)/g;
+      parsedText = parsedText.replace(embedCircuitPattern, (match, circuitURL) =>
+        `<iframe src="${circuitURL}" width="540" height="300" frameborder="0"></iframe><br>`
+      );
+    }
+
+    // [Video](link_to_video) => <iframe width="540" height="300" src="link_to_video" frameborder="0" allowfullscreen></iframe>
+    if (this.videoEmbedValue) {
+      const embedVideoPattern = /!\[Video\]\(([^)]+)\)/g;
+      parsedText = parsedText.replace(embedVideoPattern, (match, videoURL) => {
+        const videoId = videoURL.split("v=")[1].split("&")[0];
+        return `<iframe width="540" height="300" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe><br>`;
+      });
+    }
+
+    // [@(name)](link_to_profile) => <a class="tag-user" target="blank" href="link_to_profile">@name</a>
+    if (this.userTaggingValue) {
+      const tagUserPattern = /\[@\(([^)]+)\)\]\(([^)]+)\)/g;
+      parsedText = parsedText.replace(tagUserPattern, (match, username, profileURL) =>
+        `<a class="tag-user" target="_blank" href="${profileURL}">@${username}</a>`
+      );
+    }
+
+    return parsedText;
+  }
+
+  initializeModals() {
+    this.circuitModal = new bootstrap.Modal(document.getElementById('embedCircuitModal'));
     document.getElementById('insertCircuitEmbed').addEventListener('click', this.insertCircuitEmbed.bind(this));
+
+    this.videoModal = new bootstrap.Modal(document.getElementById('embedVideoModal'));
+    document.getElementById('insertVideoEmbed').addEventListener('click', this.insertVideoEmbed.bind(this));
   }
 
   openEmbedCircuitModal() {
-    this.modal.show();
+    this.circuitModal.show();
+  }
+
+  openEmbedVideoModal() {
+    this.videoModal.show();
   }
 
   insertCircuitEmbed() {
@@ -122,7 +188,15 @@ export default class extends Controller {
     if (embedLink) {
       this.editor.codemirror.replaceSelection(`![Circuit](${embedLink})`);
     }
-    this.modal.hide();
+    this.circuitModal.hide();
+  }
+
+  insertVideoEmbed() {
+    const embedLink = document.getElementById('videoEmbedLink').value;
+    if (embedLink) {
+      this.editor.codemirror.replaceSelection(`![Video](${embedLink})`);
+    }
+    this.videoModal.hide();
   }
 
   initializeUserTaggingDropdown() {

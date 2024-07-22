@@ -13,9 +13,16 @@ module SimpleDiscussion
   mattr_accessor :send_email_notifications
   mattr_accessor :send_slack_notifications
   mattr_accessor :profanity_filter
+  mattr_accessor :markdown_circuit_embed
+  mattr_accessor :markdown_video_embed
+  mattr_accessor :markdown_user_tagging
+
   @@send_email_notifications = true
   @@send_slack_notifications = true
   @@profanity_filter = true
+  @@markdown_circuit_embed = false
+  @@markdown_video_embed = false
+  @@markdown_user_tagging = false
 
   def self.setup
     yield self

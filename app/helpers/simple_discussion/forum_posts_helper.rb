@@ -1,21 +1,35 @@
 require 'redcarpet'
 class CustomRenderer < Redcarpet::Render::HTML
+  def initialize(circuit_embed: false, video_embed: false, user_tagging: false)
+    @circuit_embed = circuit_embed
+    @video_embed = video_embed
+    @user_tagging = user_tagging
+    super()
+  end
+
   def image(url, title, alt_text)
     case alt_text
     when 'Circuit'
-      "<iframe src=\"#{url}\" width=\"540\" height=\"300\" frameborder=\"0\"></iframe><br>"
+      if @circuit_embed
+        "<iframe width=\"540\" height=\"300\" src=\"#{url}\" frameborder=\"0\"></iframe><br>"
+      else
+        "<img src=\"#{url}\" alt=\"#{alt_text}\" title=\"#{title}\"><br>"
+      end
     when 'Video'
-      video_id = url.split('v=')[1].split('&')[0]
-      "<iframe width=\"300\" height=\"200\" src=\"https://www.youtube.com/embed/#{video_id}\" frameborder=\"0\" allowfullscreen></iframe><br>"
+      if @video_embed
+        video_id = url.split('v=')[1].split('&')[0]
+        "<iframe width=\"540\" height=\"300\" src=\"https://www.youtube.com/embed/#{video_id}\" frameborder=\"0\" allowfullscreen></iframe><br>"
+      else
+        "<img src=\"#{url}\" alt=\"#{alt_text}\" title=\"#{title}\"><br>"
+      end
     else
       # default image rendering
       "<img src=\"#{url}\" alt=\"#{alt_text}\" title=\"#{title}\"><br>"
     end
   end
 
-  # Add a method for user mentions (optional)
   def link(link, _title, content)
-    if link.start_with?('https://circuitverse.org/users/', 'http://localhost:3000/users/')
+    if @user_tagging && link.start_with?('/users/')
       uri = URI.parse(link)
       uri.path =~ %r{^/users/\d+/?$}
       # remove the brackets from the content
@@ -42,7 +56,11 @@ module SimpleDiscussion::ForumPostsHelper
       tables: true
     }
 
-    renderer = CustomRenderer.new
+    renderer = CustomRenderer.new(
+      circuit_embed: SimpleDiscussion.markdown_circuit_embed,
+      video_embed: SimpleDiscussion.markdown_video_embed,
+      user_tagging: SimpleDiscussion.markdown_user_tagging
+    )
     markdown = Redcarpet::Markdown.new(renderer, options)
     markdown.render(text).html_safe
   end
