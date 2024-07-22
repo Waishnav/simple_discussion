@@ -36,4 +36,8 @@
       <%= f.button "Update Thread", class: "btn forum-primary-btn", data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> #{t('saving')}"} %>
     <% end %>
   </div>
+
+  <!-- Empty div so that no error from stimulus controller-->
+  <div class="dropdown-menu" data-simplemde-target="tagDropdown">
+  </div>
 <% end %>
