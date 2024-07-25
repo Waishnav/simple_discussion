@@ -1,3 +1,4 @@
+require "language_filter"
 class ForumThread < ApplicationRecord
   extend FriendlyId
   friendly_id :title, use: :slugged
@@ -16,11 +17,28 @@ class ForumThread < ApplicationRecord
   validates :user_id, :title, presence: true
   validates_associated :forum_posts
 
+  validate :clean_title, if: -> { SimpleDiscussion.profanity_filter }
+
   scope :pinned_first, -> { order(pinned: :desc) }
   scope :solved, -> { where(solved: true) }
   scope :sorted, -> { order(updated_at: :desc) }
   scope :unpinned, -> { where.not(pinned: true) }
   scope :unsolved, -> { where.not(solved: true) }
+
+  def clean_title
+    filters = [:profanity, :sex, :violence, :hate]
+
+    detected_words = Set.new
+
+    filters.each do |matchlist|
+      filter = LanguageFilter::Filter.new(matchlist: matchlist)
+      detected_words.merge(filter.matched(title)) if filter.match?(title)
+    end
+
+    if detected_words.any?
+      errors.add(:title, I18n.t(".inappropriate_language_error_message", words: detected_words.to_a.join(", ")))
+    end
+  end
 
   def subscribed_users
     (users + optin_subscribers).uniq - optout_subscribers

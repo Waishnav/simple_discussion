@@ -1,8 +1,8 @@
 <div>
-  <h1 class="community-heading"><%= t('community') %></h1>
   <div class="row simple_discussion mt-2">
-    <div class="col-md-2 mb-3">
+    <div class="col-lg-2 mb-3 border-right">
       <div class="col sidebar-sticky">
+        <h2 class="community-heading"><%= t('community') %></h2>
         <%= link_to t('ask_a_question'), simple_discussion.new_forum_thread_path, class: "btn forum-primary-btn btn-block mb-4" %>
 
         <div class="forum-thread-filters">
@@ -60,7 +60,7 @@
 
     </div>
 
-    <div class="col-md-10 mb-3 thread-page-container">
+    <div class="col-lg-10 mb-3 thread-page-container">
       <%= yield %>
     </div>
   </div>

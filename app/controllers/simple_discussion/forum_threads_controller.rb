@@ -45,7 +45,7 @@ class SimpleDiscussion::ForumThreadsController < SimpleDiscussion::ApplicationCo
       SimpleDiscussion::ForumThreadNotificationJob.perform_later(@forum_thread)
       redirect_to simple_discussion.forum_thread_path(@forum_thread)
     else
-      render action: :new
+      render action: :new, status: :unprocessable_entity
     end
   end
 
@@ -56,7 +56,7 @@ class SimpleDiscussion::ForumThreadsController < SimpleDiscussion::ApplicationCo
     if @forum_thread.update(forum_thread_params)
       redirect_to simple_discussion.forum_thread_path(@forum_thread), notice: I18n.t("your_changes_were_saved")
     else
-      render action: :edit
+      render action: :edit, status: :unprocessable_entity
     end
   end
 

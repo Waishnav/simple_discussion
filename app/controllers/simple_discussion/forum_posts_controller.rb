@@ -13,7 +13,7 @@ class SimpleDiscussion::ForumPostsController < SimpleDiscussion::ApplicationCont
       SimpleDiscussion::ForumPostNotificationJob.perform_later(@forum_post)
       redirect_to simple_discussion.forum_thread_path(@forum_thread, anchor: "forum_post_#{@forum_post.id}")
     else
-      render template: "simple_discussion/forum_threads/show"
+      render template: "simple_discussion/forum_threads/show", status: :unprocessable_entity
     end
   end
 
@@ -24,7 +24,7 @@ class SimpleDiscussion::ForumPostsController < SimpleDiscussion::ApplicationCont
     if @forum_post.update(forum_post_params)
       redirect_to simple_discussion.forum_thread_path(@forum_thread)
     else
-      render action: :edit
+      render action: :edit, status: :unprocessable_entity
     end
   end
 

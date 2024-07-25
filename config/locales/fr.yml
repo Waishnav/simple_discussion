@@ -45,3 +45,16 @@ fr:
   check_out: Voir
   latest_questions: les dernières questions
   instead: à la place
+  forum_thread_error_explanation: "a interdit l'enregistrement de ce fil de discussion:"
+  ago: "il y a"
+  on: "le"
+  mark_as_solved: "Marquer comme résolu"
+  undo: "Annuler"
+  back_to_thread: "Retour au fil de discussion"
+  created_by: "Créé par"
+  solved: "Résolu"
+  open: "Ouvrir"
+  create_account: "Créer un compte"
+  login: "Se connecter"
+  commented: "a commenté:"
+  inappropriate_language_error_message: "contient un langage inapproprié : %{words}"
