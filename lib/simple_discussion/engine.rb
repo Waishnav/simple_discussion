@@ -12,7 +12,7 @@ module SimpleDiscussion
 
     initializer "simple_discussion.assets.precompile" do |app|
       app.config.assets.precompile += [
-        "simple_discussion/application.js",
+        "simple_discussion/application.js"
       ]
     end
 
