@@ -1,3 +1,4 @@
+require "language_filter"
 class ForumThread < ApplicationRecord
   extend FriendlyId
   friendly_id :title, use: :slugged

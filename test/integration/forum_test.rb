@@ -1,4 +1,5 @@
 require "test_helper"
+require "language_filter"
 
 class ForumTest < ActionDispatch::IntegrationTest
   include ActionView::RecordIdentifier

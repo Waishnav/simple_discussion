@@ -1,3 +1,4 @@
+require "language_filter"
 class ForumPost < ApplicationRecord
   belongs_to :forum_thread, counter_cache: true, touch: true
   belongs_to :user
