@@ -31,13 +31,6 @@
                   title: t('delete_this_post') %>
             <% end %>
             <%= link_to t('report_post'), "#", class: "dropdown-item", data: { controller: "report-post", report_post_target: "reportPostButton", toggle: "modal", target: "#reportPostModal", post_id: forum_post.id } %>
-            <% if is_moderator_or_owner?(@forum_thread) %>
-              <% if @forum_thread.solved? && forum_post.solved? %>
-                <%= link_to t('unmark_as_solution'), simple_discussion.unsolved_forum_thread_forum_post_path(@forum_thread, forum_post), class: "dropdown-item", method: :put %>
-              <% else %>
-                <%= link_to t('mark_as_solution'), simple_discussion.solved_forum_thread_forum_post_path(@forum_thread, forum_post), method: :put, class: "dropdown-item" %>
-              <% end %>
-            <% end %>
           </div>
         </div>
       <% end %>
