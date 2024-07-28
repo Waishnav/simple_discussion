@@ -20,9 +20,9 @@ module SimpleDiscussion
   @@send_email_notifications = true
   @@send_slack_notifications = true
   @@profanity_filter = true
-  @@markdown_circuit_embed = false
-  @@markdown_video_embed = false
-  @@markdown_user_tagging = false
+  @@markdown_circuit_embed = true
+  @@markdown_video_embed = true
+  @@markdown_user_tagging = true
 
   def self.setup
     yield self
