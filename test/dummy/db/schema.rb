@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 2024_08_13_072347) do
-=======
-ActiveRecord::Schema[7.0].define(version: 2024_07_28_092034) do
->>>>>>> b926dd4 (fix: ci fail due to old schema in test dummy)
   create_table "forum_categories", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
@@ -87,17 +83,10 @@ ActiveRecord::Schema[7.0].define(version: 2024_07_28_092034) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-<<<<<<< HEAD
     t.datetime "reset_password_sent_at", precision: nil
     t.datetime "remember_created_at", precision: nil
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-=======
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
->>>>>>> b926dd4 (fix: ci fail due to old schema in test dummy)
     t.string "name"
     t.boolean "moderator", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
