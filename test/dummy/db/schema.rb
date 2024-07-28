@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_07_28_092034) do
+ActiveRecord::Schema.define(version: 2024_07_28_092034) do
   create_table "forum_categories", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
