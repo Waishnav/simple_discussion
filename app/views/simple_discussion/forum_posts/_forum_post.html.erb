@@ -2,7 +2,6 @@
 
 <%= content_tag :div, id: dom_id(forum_post), class: "forum-post" do %>
   <div class="forum-post-header">
-
     <% if is_moderator_or_owner?(forum_post) %>
       <div class="float-right">
         <%= link_to icon("fas","edit"), simple_discussion.edit_forum_thread_forum_post_path(@forum_thread, forum_post),
