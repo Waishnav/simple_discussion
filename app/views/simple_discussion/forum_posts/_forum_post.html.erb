@@ -1,7 +1,16 @@
 <%= content_tag :div, id: forum_post.solved ? 'solution' : dom_id(forum_post), class: "forum-post" do %>
   <div class="forum-post-header"> 
     <div class="float-right d-flex align-items-center">
-      <% if forum_post.solved? %>
+      <% unless forum_post == @forum_thread.forum_posts.first %>
+        <% if is_moderator_or_owner?(@forum_thread) %>
+          <% if @forum_thread.solved? && forum_post.solved? %>
+            <%= link_to t('unmark_as_solution'), simple_discussion.unsolved_forum_thread_forum_post_path(@forum_thread, forum_post), method: :put, class: "badge badge-info p-2 mr-2" %>
+          <% else %>
+            <%= link_to t('mark_as_solution'), simple_discussion.solved_forum_thread_forum_post_path(@forum_thread, forum_post), method: :put, class: "badge badge-info p-2 mr-2" %>
+          <% end %>
+        <% end %>
+      <% end %>
+      <% if forum_post.solved? && forum_post != @forum_thread.forum_posts.first && !is_moderator_or_owner?(@forum_thread) %>
         <span class="badge badge-success p-2 mr-2"><%= t('solution') %></span>
       <% end %>
       <% if user_signed_in? %>
@@ -20,13 +29,6 @@
                   method: :delete, 
                   data: { toggle: "tooltip", placement: "left", confirm: "Are you sure you want to delete this post?" },
                   title: t('delete_this_post') %>
-            <% end %>
-            <% if is_moderator_or_owner?(@forum_thread) %>
-              <% if @forum_thread.solved? && forum_post.solved? %>
-                <%= link_to t('unmark_as_solution'), simple_discussion.unsolved_forum_thread_forum_post_path(@forum_thread, forum_post), class: "dropdown-item", method: :put %>
-              <% else %>
-                <%= link_to t('mark_as_solution'), simple_discussion.solved_forum_thread_forum_post_path(@forum_thread, forum_post), method: :put, class: "dropdown-item" %>
-              <% end %>
             <% end %>
             <%= link_to t('report_post'), "#", class: "dropdown-item", data: { controller: "report-spam", report_spam_target: "reportSpamButton", toggle: "modal", target: "#reportSpamModal", post_id: forum_post.id } %>
           </div>
