@@ -41,6 +41,14 @@
               <%= t('.unanswered') %>
             </div>
           <% end %>
+
+          <%= forum_link_to simple_discussion.leaderboard_forum_threads_path do %>
+            <div class="btn-link">
+              <%= icon "fa-fw fas", "trophy" %>
+              <%= t('.leaderboard') %>
+            </div>
+          <% end %>
+
           <% if is_moderator? %>
             <%= forum_link_to simple_discussion.spam_reports_forum_threads_path do %>
               <div class="btn-link">
