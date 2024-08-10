@@ -100,18 +100,19 @@
   })
 
 
-  Stimulus.register("report-spam", class extends Controller {
-    static targets = ["reportSpamButton"]
+  Stimulus.register("report-post", class extends Controller {
+    static targets = ["reportPostButton"]
 
     connect() {
-      const reportSpamForm = document.getElementById("reportSpamForm")
+      const reportPostForm = document.getElementById("reportPostForm")
       const postId = this.element.dataset.postId
-      this.reportSpamButtonTarget.addEventListener("click", () => {
-        const formActionArray = reportSpamForm.action.split("/")
+      this.reportPostButtonTarget.addEventListener("click", () => {
+        const formActionArray = reportPostForm.action.split("/")
+        console.log(formActionArray)
         if (formActionArray[formActionArray.length - 2] === "threads") {
-          reportSpamForm.action += `/posts/${postId}/report_spam`
+          reportPostForm.action += `/posts/${postId}/report_post`
         } else {
-          reportSpamForm.action = reportSpamForm.action.replace(/\/\d+\//, `/${postId}/`)
+          reportPostForm.action = reportPostForm.action.replace(/\/\d+\//, `/${postId}/`)
         }
       })
     }

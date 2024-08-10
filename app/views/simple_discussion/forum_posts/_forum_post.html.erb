@@ -30,7 +30,7 @@
                   data: { toggle: "tooltip", placement: "left", confirm: "Are you sure you want to delete this post?" },
                   title: t('delete_this_post') %>
             <% end %>
-            <%= link_to t('report_post'), "#", class: "dropdown-item", data: { controller: "report-spam", report_spam_target: "reportSpamButton", toggle: "modal", target: "#reportSpamModal", post_id: forum_post.id } %>
+            <%= link_to t('report_post'), "#", class: "dropdown-item", data: { controller: "report-post", report_post_target: "reportPostButton", toggle: "modal", target: "#reportPostModal", post_id: forum_post.id } %>
           </div>
         </div>
       <% end %>
