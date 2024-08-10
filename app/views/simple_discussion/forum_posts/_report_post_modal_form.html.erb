@@ -16,18 +16,18 @@
               <% end %>
             </div>
           <% end %>
-
           <div class="form-group">
             <%= f.collection_radio_buttons :reason, SpamReport.reasons.keys, :to_s, :humanize, include_hidden: false do |b| %>
               <div class="form-check">
-                <%= b.radio_button(class: "form-check-input") %>
+                <%= b.radio_button(class: "form-check-input toggle-reason", required: true) %>
                 <%= b.label(class: "form-check-label") %>
               </div>
             <% end %>
           </div>
-          <div class="form-group">
+          <div class="form-group" id="details-group" style="display: none;">
             <%= f.label :details, "Reason in detail (if others)" %>
-            <%= f.text_area :details, class: "form-control", rows: 2 %>
+            <%= f.text_area :details, class: "form-control", rows: 2, id: "details-input" %>
+            <div class="invalid-feedback">Please provide details for 'Other' reason.</div>
           </div>
           <%= f.submit "Report", class: "btn btn-danger" %>
         <% end %>
@@ -35,3 +35,34 @@
     </div>
   </div>
 </div>
+
+<script>
+$(document).ready(function() {
+  const $detailsGroup = $('#details-group');
+  const $detailsInput = $('#details-input');
+  const $form = $('#reportPostForm');
+
+  $('.toggle-reason').change(function() {
+    if ($(this).val() === 'others') {
+      $detailsGroup.show();
+      $detailsInput.attr('required', true);
+    } else {
+      $detailsGroup.hide();
+      $detailsInput.removeAttr('required');
+    }
+  });
+
+  $form.on('submit', function(e) {
+    if ($('input[name="reason"]:checked').val() === 'others' && $detailsInput.val().trim() === '') {
+      e.preventDefault();
+      $detailsInput.addClass('is-invalid');
+    } else {
+      $detailsInput.removeClass('is-invalid');
+    }
+  });
+
+  $detailsInput.on('input', function() {
+    $(this).removeClass('is-invalid');
+  });
+});
+</script>
