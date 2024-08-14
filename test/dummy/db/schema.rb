@@ -10,13 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_28_092034) do
+ActiveRecord::Schema[7.0].define(version: 2024_08_13_072347) do
   create_table "forum_categories", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
     t.string "color", default: "000000"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "forum_leaderboards", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "points", default: 0, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["points"], name: "index_forum_leaderboards_on_points"
+    t.index ["user_id"], name: "index_forum_leaderboards_on_user_id", unique: true
   end
 
   create_table "forum_posts", force: :cascade do |t|
@@ -68,10 +77,12 @@ ActiveRecord::Schema.define(version: 2024_07_28_092034) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "name"
+    t.boolean "moderator", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "forum_leaderboards", "users"
   add_foreign_key "forum_posts", "forum_threads"
   add_foreign_key "forum_posts", "users"
   add_foreign_key "forum_subscriptions", "forum_threads"
