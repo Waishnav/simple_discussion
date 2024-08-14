@@ -12,8 +12,13 @@ class SimpleDiscussion::ApplicationController < ::ApplicationController
   end
   helper_method :is_moderator_or_owner?
 
+  def is_owner?(object)
+    object.user == current_user
+  end
+  helper_method :is_owner?
+
   def is_moderator?
-    current_user&.moderator?
+    current_user.respond_to?(:moderator?) && current_user.moderator?
   end
   helper_method :is_moderator?
 
