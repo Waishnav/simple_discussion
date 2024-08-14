@@ -10,7 +10,7 @@ class SimpleDiscussion::ForumPostsController < SimpleDiscussion::ApplicationCont
     delete_post: -10, # on forum post deletion
     marked_as_solution: 100, # if forum thread author/moderator marked the post as solved
     unmarked_as_solution: -100, # undoing the marked as solution
-    delete_reported_post: -100, # if moderator deletes the post hence it is spam post
+    delete_reported_post: -100 # if moderator deletes the post hence it is spam post
   }
 
   def create
@@ -51,12 +51,12 @@ class SimpleDiscussion::ForumPostsController < SimpleDiscussion::ApplicationCont
       end
 
       # leaderboard points distribution
-      if is_moderator? and @forum_post.user != current_user
+      if is_moderator? && (@forum_post.user != current_user)
         update_leaderboard(@forum_post.user, POINTS[:delete_reported_post])
         # further we can distribute points if needed to the user who reported the post
 
-        #spam_report = SpamReport.find_by(forum_post: @forum_post)
-        #update_leaderboard(spam_report.user, POINTS[:report_spam]) if spam_report
+        # spam_report = SpamReport.find_by(forum_post: @forum_post)
+        # update_leaderboard(spam_report.user, POINTS[:report_spam]) if spam_report
       else
         update_leaderboard(@forum_post.user, POINTS[:delete_post])
       end
@@ -141,4 +141,3 @@ class SimpleDiscussion::ForumPostsController < SimpleDiscussion::ApplicationCont
     end
   end
 end
-

@@ -7,7 +7,7 @@ class SimpleDiscussion::ForumThreadsController < SimpleDiscussion::ApplicationCo
   POINTS = {
     create_thread: 20, # on forum thread creation
     delete_thread: -20, # on forum thread deletion
-    delete_reported_thread_by_moderator: -100, # if moderator deletes the thread hence it is spam post
+    delete_reported_thread_by_moderator: -100 # if moderator deletes the thread hence it is spam post
   }
 
   def index
@@ -82,7 +82,7 @@ class SimpleDiscussion::ForumThreadsController < SimpleDiscussion::ApplicationCo
   def destroy
     ActiveRecord::Base.transaction do
       @forum_thread.destroy!
-      if is_moderator? and @forum_thread.user != current_user
+      if is_moderator? && (@forum_thread.user != current_user)
         update_leaderboard(@forum_thread.user, POINTS[:delete_reported_thread_by_moderator])
       else
         update_leaderboard(@forum_thread.user, POINTS[:delete_thread])
