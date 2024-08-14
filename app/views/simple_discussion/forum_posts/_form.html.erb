@@ -31,7 +31,7 @@
                    .where(forum_threads: { id: @forum_thread.id })
                    .distinct %>
     <% users.each do |user| %>
-      <button class="dropdown-item" type="button" data-name="<%= user.name %>" data-profile-link="<%= user_path(user) %>">
+      <button class="dropdown-item" type="button" data-name="<%= user.name %>" data-profile-link="<%= user_profile_link(user) %>">
         <%# image_tag user.profile_picture, class: "rounded-circle", style: "width: 20px; height: 20px" %>
         <img class="rounded-circle mr-1" src="<%= gravatar_url_for(@forum_post.user.email, size: 24) %>" alt="avatar of user">
         <%= user.name %>
