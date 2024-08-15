@@ -10,13 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2024_07_28_092034) do
+ActiveRecord::Schema.define(version: 2024_08_13_072347) do
   create_table "forum_categories", force: :cascade do |t|
     t.string "name", null: false
     t.string "slug", null: false
     t.string "color", default: "000000"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
+  end
+
+  create_table "forum_leaderboards", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "points", default: 0, null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.index ["points"], name: "index_forum_leaderboards_on_points"
+    t.index ["user_id"], name: "index_forum_leaderboards_on_user_id", unique: true
   end
 
   create_table "forum_posts", force: :cascade do |t|
@@ -24,16 +33,16 @@ ActiveRecord::Schema.define(version: 2024_07_28_092034) do
     t.integer "user_id"
     t.text "body"
     t.boolean "solved", default: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "forum_subscriptions", force: :cascade do |t|
     t.integer "forum_thread_id"
     t.integer "user_id"
     t.string "subscription_type"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "forum_threads", force: :cascade do |t|
@@ -44,8 +53,8 @@ ActiveRecord::Schema.define(version: 2024_07_28_092034) do
     t.integer "forum_posts_count", default: 0
     t.boolean "pinned", default: false
     t.boolean "solved", default: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
   end
 
   create_table "spam_reports", force: :cascade do |t|
@@ -53,8 +62,8 @@ ActiveRecord::Schema.define(version: 2024_07_28_092034) do
     t.integer "user_id", null: false
     t.integer "reason", null: false
     t.text "details"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["forum_post_id"], name: "index_spam_reports_on_forum_post_id"
     t.index ["user_id"], name: "index_spam_reports_on_user_id"
   end
@@ -63,15 +72,17 @@ ActiveRecord::Schema.define(version: 2024_07_28_092034) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "remember_created_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "name"
+    t.boolean "moderator", default: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "forum_leaderboards", "users"
   add_foreign_key "forum_posts", "forum_threads"
   add_foreign_key "forum_posts", "users"
   add_foreign_key "forum_subscriptions", "forum_threads"
