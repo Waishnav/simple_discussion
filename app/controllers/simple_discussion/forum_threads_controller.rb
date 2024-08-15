@@ -74,8 +74,8 @@ class SimpleDiscussion::ForumThreadsController < SimpleDiscussion::ApplicationCo
   def search
     if params[:query].present?
       @forum_threads = topic_search(params[:query])
-                                  .includes(:user, :forum_category)
-                                  .paginate(per_page: 10, page: page_number)
+        .includes(:user, :forum_category)
+        .paginate(per_page: 10, page: page_number)
     else
       index
       return
