@@ -11,8 +11,6 @@ class ForumPost < ApplicationRecord
   scope :sorted, -> { order(:created_at) }
 
   after_update :solve_forum_thread, if: :solved?
-  after_update :update_thread_searchable, if: :is_first_post?
-  after_destroy :update_thread_searchable, if: :is_first_post?
 
   def clean_body
     filters = [:profanity, :sex, :violence, :hate]
@@ -29,14 +27,6 @@ class ForumPost < ApplicationRecord
   end
 
   private
-
-  def is_first_post?
-    forum_thread.forum_posts.order(:created_at).first == self
-  end
-
-  def update_thread_searchable
-    forum_thread.update_searchable
-  end
 
   def solve_forum_thread
     forum_thread.update(solved: true)
