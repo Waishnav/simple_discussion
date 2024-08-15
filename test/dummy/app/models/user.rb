@@ -7,6 +7,6 @@ class User < ApplicationRecord
     :recoverable, :rememberable, :validatable
 
   def moderator?
-    true
+    moderator
   end
 end
