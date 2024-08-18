@@ -190,4 +190,85 @@ class ForumTest < ActionDispatch::IntegrationTest
     assert_response :redirect
     assert_redirected_to root_path
   end
+
+  test "leaderboard page" do
+    sign_in @regular_user
+    get leaderboard_forum_threads_path
+    assert_response :success
+    assert_match "Leaderboard", response.body
+  end
+
+  test "distribute leaderboard points on new forum thread" do
+    sign_in @regular_user
+
+    initial_leaderboard = @regular_user.forum_leaderboard || @regular_user.build_forum_leaderboard
+    initial_points = initial_leaderboard.points
+
+    post forum_threads_path, params: {
+      forum_thread: {
+        forum_category_id: forum_categories(:general).id,
+        title: "Test Thread",
+        forum_posts_attributes: [{
+          body: "Hello test thread"
+        }]
+      }
+    }
+    assert_response :redirect
+    follow_redirect!
+    assert_response :success
+
+    @regular_user.reload
+    assert_equal initial_points + SimpleDiscussion::ForumThreadsController::POINTS[:create_thread], @regular_user.forum_leaderboard.points
+  end
+
+  test "delete leaderboard points on deleting forum thread by author of thread" do
+    sign_in @regular_user
+
+    initial_leaderboard = @regular_user.forum_leaderboard || @regular_user.create_forum_leaderboard(points: 0)
+    initial_points = initial_leaderboard.points
+
+    thread = @regular_user.forum_threads.last
+
+    assert_difference -> { @regular_user.forum_leaderboard.reload.points }, SimpleDiscussion::ForumThreadsController::POINTS[:delete_thread] do
+      delete forum_thread_path(thread)
+    end
+
+    assert_response :redirect
+    follow_redirect!
+    assert_response :success
+
+    @regular_user.reload
+    assert_equal initial_points + SimpleDiscussion::ForumThreadsController::POINTS[:delete_thread], @regular_user.forum_leaderboard.points
+  end
+
+  test "delete leaderboard points on deleting forum thread by moderator" do
+    sign_in @moderator_user
+
+    thread = ForumThread.create!(
+      user: @regular_user,
+      forum_category_id: forum_categories(:general).id,
+      title: "Thread to be deleted by moderator",
+      forum_posts_attributes: [{body: "This will be deleted by moderator", user: @regular_user}]
+    )
+
+    puts @moderator_user
+    puts "++++++++++++++++++++++++++++++++++++++++"
+    puts @regular_user
+
+    initial_leaderboard = @regular_user.forum_leaderboard || @regular_user.create_forum_leaderboard(points: 0)
+    initial_points = initial_leaderboard.points
+    puts "Leaderboard: #{initial_leaderboard.inspect}"
+    puts "Leaderboard ID: #{initial_leaderboard.id}"
+
+    assert_difference -> { @regular_user.forum_leaderboard.reload.points }, SimpleDiscussion::ForumThreadsController::POINTS[:delete_reported_thread_by_moderator] do
+      delete forum_thread_path(thread)
+    end
+
+    assert_response :redirect
+    follow_redirect!
+    assert_response :success
+
+    @regular_user.reload
+    assert_equal initial_points + SimpleDiscussion::ForumThreadsController::POINTS[:delete_reported_thread_by_moderator], @regular_user.forum_leaderboard.points
+  end
 end
