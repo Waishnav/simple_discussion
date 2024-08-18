@@ -1,0 +1,68 @@
+<div class="modal fade" id="reportPostModal" tabindex="-1" role="dialog" aria-labelledby="reportSpamModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="reportSpamModalLabel">Report Post as Spam</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <%= form_with id:"reportPostForm", url: simple_discussion.forum_thread_path(forum_thread), method: :post, local: true  do |f| %>
+          <% if @spam_report && @spam_report.errors.any? %>
+            <div class="alert alert-danger" role="alert">
+              <% @spam_report.errors.full_messages.each do |message| %>
+                <li><%= message %></li>
+              <% end %>
+            </div>
+          <% end %>
+          <div class="form-group">
+            <%= f.collection_radio_buttons :reason, SpamReport.reasons.keys, :to_s, :humanize, include_hidden: false do |b| %>
+              <div class="form-check">
+                <%= b.radio_button(class: "form-check-input toggle-reason", required: true) %>
+                <%= b.label(class: "form-check-label") %>
+              </div>
+            <% end %>
+          </div>
+          <div class="form-group" id="details-group" style="display: none;">
+            <%= f.label :details, "Reason in detail (if others)" %>
+            <%= f.text_area :details, class: "form-control", rows: 2, id: "details-input" %>
+            <div class="invalid-feedback">Please provide details for 'Other' reason.</div>
+          </div>
+          <%= f.submit "Report", class: "btn btn-danger" %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+$(document).ready(function() {
+  const $detailsGroup = $('#details-group');
+  const $detailsInput = $('#details-input');
+  const $form = $('#reportPostForm');
+
+  $('.toggle-reason').change(function() {
+    if ($(this).val() === 'others') {
+      $detailsGroup.show();
+      $detailsInput.attr('required', true);
+    } else {
+      $detailsGroup.hide();
+      $detailsInput.removeAttr('required');
+    }
+  });
+
+  $form.on('submit', function(e) {
+    if ($('input[name="reason"]:checked').val() === 'others' && $detailsInput.val().trim() === '') {
+      e.preventDefault();
+      $detailsInput.addClass('is-invalid');
+    } else {
+      $detailsInput.removeClass('is-invalid');
+    }
+  });
+
+  $detailsInput.on('input', function() {
+    $(this).removeClass('is-invalid');
+  });
+});
+</script>
