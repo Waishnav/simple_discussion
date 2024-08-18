@@ -201,7 +201,7 @@ class ForumTest < ActionDispatch::IntegrationTest
   test "distribute leaderboard points on new forum thread" do
     sign_in @regular_user
 
-    initial_leaderboard = @regular_user.forum_leaderboard || @regular_user.build_forum_leaderboard
+    initial_leaderboard = @regular_user.forum_leaderboard || @regular_user.create_forum_leaderboard(points: 0)
     initial_points = initial_leaderboard.points
 
     post forum_threads_path, params: {
@@ -251,14 +251,8 @@ class ForumTest < ActionDispatch::IntegrationTest
       forum_posts_attributes: [{body: "This will be deleted by moderator", user: @regular_user}]
     )
 
-    puts @moderator_user
-    puts "++++++++++++++++++++++++++++++++++++++++"
-    puts @regular_user
-
     initial_leaderboard = @regular_user.forum_leaderboard || @regular_user.create_forum_leaderboard(points: 0)
     initial_points = initial_leaderboard.points
-    puts "Leaderboard: #{initial_leaderboard.inspect}"
-    puts "Leaderboard ID: #{initial_leaderboard.id}"
 
     assert_difference -> { @regular_user.forum_leaderboard.reload.points }, SimpleDiscussion::ForumThreadsController::POINTS[:delete_reported_thread_by_moderator] do
       delete forum_thread_path(thread)
