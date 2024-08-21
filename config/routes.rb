@@ -14,7 +14,7 @@ SimpleDiscussion::Engine.routes.draw do
         member do
           put :solved
           put :unsolved
-          post :report_spam
+          post :report_post
         end
       end
 

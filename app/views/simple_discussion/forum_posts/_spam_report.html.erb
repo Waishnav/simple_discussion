@@ -22,7 +22,7 @@
   <td>
     <div class="d-flex flex-row justify-content-between align-items-center p-2">
       <% if spam_report.reason == "others" %>
-        <%= spam_report.details %>
+        Other:<%= spam_report.details %>
       <% else %>
         <%= spam_report.reason.humanize %>
       <% end %>
