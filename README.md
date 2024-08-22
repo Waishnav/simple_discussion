@@ -87,24 +87,23 @@ SimpleDiscussion is a comprehensive Rails forum gem, inspired by the [GoRails fo
    rails db:migrate
    ```
 
-3. Create an initializer file `config/initializers/simple_discussion.rb`:
+3. (Optional) Create an initializer file `config/initializers/simple_discussion.rb`. Using this file, you can toggle these [advanced features](#advanced-features) using the following flags.
 
-```ruby
-SimpleDiscussion.setup do |config|
-  config.profanity_filter = true # Default: true
-  config.topic_search = true # Default: false
+   ```ruby
+   SimpleDiscussion.setup do |config|
+     config.profanity_filter = true # Default: true
+     config.topic_search = true # Default: false
 
-  config.markdown_editor= true # Default: true
-  config.markdown_circuit_embed = false # Default: true
-  config.markdown_user_tagging = false # Default: true
-  config.markdown_video_embed = false # Default: true
+     config.markdown_editor= true # Default: true
+     config.markdown_circuit_embed = false # Default: true
+     config.markdown_user_tagging = false # Default: true
+     config.markdown_video_embed = false # Default: true
 
-  config.send_email_notifications = true # Default: true
-  config.send_slack_notifications = false # Default: true
+     config.send_email_notifications = true # Default: true
+     config.send_slack_notifications = false # Default: true
 
-end
-```
-
+   end
+   ```
 ## Usage
 
 Add a link to the forum in your application's navbar:
@@ -151,43 +150,18 @@ rails g simple_discussion:helpers
 
 ### Markdown Editor
 
-By default markdown editor for drafting forum post and forum threads is enable. You can disable it like this.
-
-```ruby
-SimpleDiscussion.setup do |config|
-  config.markdown_editor = false # Default: true
-end
-```
+By Markdown editor for drafting forum post and forum threads is enable. You can disable it from initilizer file.
 
 Also we have introduced the markdown extension to embed the CircuitVerse Circuits, YouTube video, User tagging for CircuitVerse usecase.
-You can toggle these features as well using following config.
+You can toggle these features as well using following feature flags.
 
-```ruby
-SimpleDiscussion.setup do |config|
-  config.markdown_circuit_embed = false # Default: true
-  config.markdown_user_tagging = false # Default: true
-  config.markdown_video_embed = false # Default: true
-end
-```
 ### Profanity Check and Language Filter
 
-By default profanity check is enabled you can disable it from your initilizer file:
-
-```ruby
-SimpleDiscussion.setup do |config|
-  config.profanity_filter = true # Default: true
-end
-```
+By default profanity check and language filter on forum post is enable, you can disable it from your initilizer file.
 
 ### Topic Search
 
-Enable topic search in the initializer:
-
-```ruby
-SimpleDiscussion.setup do |config|
-  config.topic_search = true # Default: true
-end
-```
+Enable topic search from the initializer file:
 
 Implement the `topic_search` helper method in your rails application:
 
