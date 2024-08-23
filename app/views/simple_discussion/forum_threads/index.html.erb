@@ -6,7 +6,7 @@
     <% end %>
   </select>
   <%= form_tag("/forum/threads/search", method: "get", id: "search-box", class: "form-inline") do %>
-    <%= text_field_tag :query, params[:query], placeholder: "Search for Forum Threads", autocomplete: "off", class: "form-control form-input" %>
+    <%= text_field_tag :query, params[:query], placeholder: t('topic_search_input_placeholder'), autocomplete: "off", class: "form-control form-input" %>
     <button class="btn primary-button" type="submit" name="button" value="Submit">Search</button>
   <% end %>
 </div>
