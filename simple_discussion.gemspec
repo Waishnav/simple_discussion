@@ -29,3 +29,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency "language_filter", ">= 0.3.01"
   spec.metadata["rubygems_mfa_required"] = "true"
 end
+
