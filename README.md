@@ -1,44 +1,49 @@
-# SimpleDiscussion - A Powerful Forum Engine for Ruby on Rails
+# SimpleDiscussion: A Powerful Forum Engine for Ruby on Rails
 
 [![Build Status](https://github.com/circuitverse/simple_discussion/workflows/Tests/badge.svg)](https://github.com/circuitverse/simple_discussion/actions) [![Gem Version](https://badge.fury.io/rb/simple_discussion.svg)](https://badge.fury.io/rb/simple_discussion)
 
-SimpleDiscussion is a comprehensive Rails forum gem, inspired by the [GoRails forum](https://gorails.com/forum). It is being used in production by CircuitVerse currently. You can check it out [here](https://circuitverse.org/forum). It offers a rich set of features including categories, markdown editor like GitHub, moderation tools, solved thread marking, and more.
-
-## Key Features
-
-- Markdown editor for posts and threads
-- Category organization
-- Simple moderation system
-- Spam reporting and moderation tools
-- Ability to mark threads as solved
-- Topic search functionality
-- Email and Slack notifications
-- Customizable styling (Bootstrap v4 compatible out-of-the-box)
+SimpleDiscussion is a comprehensive Rails forum gem, inspired by the [GoRails forum](https://gorails.com/forum). It's currently in production use by CircuitVerse, which you can see in action [here](https://circuitverse.org/forum).
 
 ![GoRails Forum Screenshot](https://d3vv6lp55qjaqc.cloudfront.net/items/3j2p3o1j0d1O0R1w2j1Y/Screen%20Shot%202017-08-08%20at%203.12.01%20PM.png?X-CloudApp-Visitor-Id=51470&v=d439dcae)
 
 ## Table of Contents
 
-1. [Installation](#installation)
-2. [Configuration](#configuration)
-3. [Usage](#usage)
-4. [Customization](#customization)
-5. [Advanced Features](#advanced-features)
-    - [Markdown Editor](#markdown-editor)
-    - [Profanity Checks and Language Filter](#profanity-check-and-language-filter)
-    - [Topic Search](#topic-search)
-    - [Slack and Email Notifications](#slack-and-email-notifications)
-6. [Development](#development)
-7. [Contributing](#contributing)
-8. [License](#license)
-9. [Code of Conduct](#code-of-conduct)
+1. [Features](#features)
+2. [Installation](#installation)
+3. [Configuration](#configuration)
+4. [Usage](#usage)
+5. [Customization](#customization)
+   - [Styling](#styling)
+   - [Views and Controllers](#views-and-controllers)
+6. [Advanced Features](#advanced-features)
+   - [Markdown Editor](#markdown-editor)
+   - [Profanity Check and Language Filter](#profanity-check-and-language-filter)
+   - [Topic Search](#topic-search)
+   - [Notifications](#notifications)
+7. [Development](#development)
+8. [Contributing](#contributing)
+9. [License](#license)
+10. [Code of Conduct](#code-of-conduct)
+
+## Features
+
+SimpleDiscussion offers a rich set of features to create a fully-functional forum:
+
+- **Markdown Editor**: GitHub-like editor for posts and threads
+- **Category Organization**: Easily categorize discussions
+- **Moderation System**: Simple yet effective moderation tools
+- **Spam Reporting**: Allow users to report spam
+- **Thread Solving**: Mark threads as solved
+- **Topic Search**: Built-in search functionality (can be overridable)
+- **Notifications**: Email and Slack notifications
+- **Customizable Styling**: Bootstrap v4 compatible out-of-the-box
 
 ## Installation
 
 1. Add SimpleDiscussion to your Gemfile:
 
    ```ruby
-   gem 'simple_discussion'
+   gem 'simple_discussion', github: "CircuitVerse/simple_discussion"
    ```
 
 2. Install the gem:
@@ -87,21 +92,19 @@ SimpleDiscussion is a comprehensive Rails forum gem, inspired by the [GoRails fo
    rails db:migrate
    ```
 
-3. (Optional) Create an initializer file `config/initializers/simple_discussion.rb`. Using this file, you can toggle these [advanced features](#advanced-features) using the following flags.
+3. (Optional) Create an initializer file `config/initializers/simple_discussion.rb`:
 
    ```ruby
    SimpleDiscussion.setup do |config|
      config.profanity_filter = true # Default: true
-
      config.markdown_circuit_embed = false # Default: true
      config.markdown_user_tagging = false # Default: true
      config.markdown_video_embed = false # Default: true
-
      config.send_email_notifications = true # Default: true
      config.send_slack_notifications = false # Default: true
-
    end
    ```
+
 ## Usage
 
 Add a link to the forum in your application's navbar:
@@ -148,18 +151,16 @@ rails g simple_discussion:helpers
 
 ### Markdown Editor
 
-Markdown Editor for drafting forum post and forum thread will be shown by default. but also we have introduced the markdown extension to embed the CircuitVerse Circuits, YouTube video, User tagging for CircuitVerse usecase.
-You can toggle these features as well using following feature flags.
+The Markdown Editor for drafting forum posts and threads is enabled by default. It includes extensions for embedding CircuitVerse Circuits, YouTube videos, and user tagging. These features can be toggled in the initializer.
 
 ### Profanity Check and Language Filter
 
-By default profanity check and language filter on forum post is enable, you can disable it from your initilizer file.
+Profanity checking and language filtering on forum posts are enabled by default. You can disable this feature in the initializer file.
 
 ### Topic Search
 
-By defualt, we have basic implementation for the search across the forum thread.
+A basic implementation for searching across forum threads is included. You can enhance this by overriding the `ForumThread` model in your Rails application:
 
-Following is the basic implementation of `search` method on our ForumThread model, You can go as complex as you want and introduce ElasticSearch, MilliSerach or Postgres's FTS by overriding the ForumThread Model in your rails application.
 ```ruby
 class ForumThread < ApplicationRecord
   def self.search(query)
@@ -169,19 +170,12 @@ class ForumThread < ApplicationRecord
   end
 end
 ```
-Override the `ForumThread` Model from your rails application and introduce your search like this.
-Note: Make sure you name the method on ForumThread model as `search`
-```ruby
-ForumThread.class_eval do
-  include PgSearch::Model
-  pg_search_scope :search,
-                  against: :title
-end
-```
 
-### Slack and Email Notifications
+For more advanced search capabilities, you can integrate with ElasticSearch, MilliSearch, or Postgres's FTS.
 
-Configure email and Slack notifications in the initializer. For Slack, set `simple_discussion_slack_url` in `config/secrets.yml`.
+### Notifications
+
+Email and Slack notifications can be configured in the initializer. For Slack notifications, set `simple_discussion_slack_url` in `config/secrets.yml`.
 
 ## Development
 
