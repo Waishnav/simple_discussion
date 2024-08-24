@@ -92,9 +92,7 @@ SimpleDiscussion is a comprehensive Rails forum gem, inspired by the [GoRails fo
    ```ruby
    SimpleDiscussion.setup do |config|
      config.profanity_filter = true # Default: true
-     config.topic_search = true # Default: false
 
-     config.markdown_editor= true # Default: true
      config.markdown_circuit_embed = false # Default: true
      config.markdown_user_tagging = false # Default: true
      config.markdown_video_embed = false # Default: true
@@ -150,9 +148,7 @@ rails g simple_discussion:helpers
 
 ### Markdown Editor
 
-By Markdown editor for drafting forum post and forum threads is enable. You can disable it from initilizer file.
-
-Also we have introduced the markdown extension to embed the CircuitVerse Circuits, YouTube video, User tagging for CircuitVerse usecase.
+Markdown Editor for drafting forum post and forum thread will be shown by default. but also we have introduced the markdown extension to embed the CircuitVerse Circuits, YouTube video, User tagging for CircuitVerse usecase.
 You can toggle these features as well using following feature flags.
 
 ### Profanity Check and Language Filter
@@ -161,16 +157,25 @@ By default profanity check and language filter on forum post is enable, you can 
 
 ### Topic Search
 
-Enable topic search from the initializer file:
+By defualt, we have basic implementation for the search across the forum thread.
 
-Implement the `topic_search` helper method in your rails application:
-
-Following is the example implementation of `topic_search` helper, You can go as complex as you want. You can introduce ElasticSearch, MilliSerach or Postgres's FTS.
+Following is the basic implementation of `search` method on our ForumThread model, You can go as complex as you want and introduce ElasticSearch, MilliSerach or Postgres's FTS by overriding the ForumThread Model in your rails application.
 ```ruby
-def topic_search(query)
-  ForumThread.joins(:forum_posts)
-             .where("forum_threads.title LIKE :query OR forum_posts.body LIKE :query", query: "%#{query}%")
-             .distinct
+class ForumThread < ApplicationRecord
+  def self.search(query)
+    ForumThread.joins(:forum_posts)
+               .where("forum_threads.title LIKE :query OR forum_posts.body LIKE :query", query: "%#{query}%")
+               .distinct
+  end
+end
+```
+Override the `ForumThread` Model from your rails application and introduce your search like this.
+Note: Make sure you name the method on ForumThread model as `search`
+```ruby
+ForumThread.class_eval do
+  include PgSearch::Model
+  pg_search_scope :search,
+                  against: :title
 end
 ```
 
